@@ -49,9 +49,42 @@ Deployment URL: https://esavage-auth-api.herokuapp.com/
 
 ## Routes
 
+### api/v1 (no authentication required)
+- POST `/:model` 
+  - requires model param and obj
+  - returns created obj from database
+- GET `/:model` 
+  - requires model param
+  - returns all objs from model database table
+- GET `/:model/:id` 
+  - requires model and id params
+  - returns object in model database with that specific id 
+- PUT `/:model/:id` 
+  - requires model and id params plus obj to update
+  - returns updated obj
+- DELETE `/:model/:id` 
+  - requires model and id params
+  - returns status code either successful or not
+
+### api/v2 (authentication required)
+- POST `/:model` 
+  - requires model param, obj, token and acl with create permissions
+  - returns created obj from database
+- GET `/:model` 
+  - requires model param, basic auth and acl with read permissions
+  - returns all objs from model database table
+- GET `/:model/:id` 
+  - requires model and id params, basic auth and acl with read permissions
+  - returns object in model database with that specific id 
+- PUT `/:model/:id` 
+  - requires model and id params plus obj to update, token and acl with write permissions
+  - returns updated obj
+- DELETE `/:model/:id` 
+  - requires model and id params, token and acl with delete permissions
+  - returns status code either successful or not
+
 ### Signup
 -  POST `/signup`, requires a user object: returns created user object from database
-
 
 ### Signin
 -  POST `/signin`, requires a user object: returns validated user object from database with token
