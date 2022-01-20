@@ -4,15 +4,13 @@ Creating an authenticated API server that utilizes Role Based Access Control (RB
 - Starter Code Provided By: Code Fellows
 - Developed By: Erik Savage
 
-dev branch PR: https://github.com/eriksavage/bearer-auth/pull/1
-
-Deployment URL: https://esavage-bearer-auth.herokuapp.com/
+Deployment URL: https://esavage-auth-api.herokuapp.com/
 
 ![Data Flow](/UML.png)
 
 ## Installation
-- to install run `git@github.com:eriksavage/bearer-auth.git`
-- `cd` into basic-auth
+- to install run `git@github.com:eriksavage/auth-api.git`
+- `cd` into auth-api
 - run `npm install`
 
 ## Usage
@@ -23,21 +21,29 @@ Deployment URL: https://esavage-bearer-auth.herokuapp.com/
 
 ### User
 ```
-'User', {
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  token: {
-      type: DataTypes.VIRTUAL,
-      get() {
-        return jwt.sign({ username: this.username }, APP_SECRET);
-      },
-    },
+'Users', {
+    username: string, required,
+    password: string, required,
+    role: one of('user', 'writer', 'editor', 'admin'), required,
+    token: required,
+    capabilities: acl ['read', 'create', 'update', 'delete'],
+}
+```
+
+### Clothes
+```
+'Clothes', {
+  name: string, required,
+  color: string, required,
+  size: string, required,
+}
+```
+### Food
+```
+'Food', {
+  name: string, required,
+  calories: number, required,
+  type: ('fruit', 'vegetable', 'protein'), required,
 }
 ```
 
@@ -71,5 +77,4 @@ Verifies the following:
 - http cats
 - Code Fellows
   - Kellen Linse
-  - Sarah Creager
-  - Jacob Knaack
+  - Daniel Jackson
