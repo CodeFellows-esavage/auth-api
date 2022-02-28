@@ -13,55 +13,60 @@ afterAll(async () => {
   await db.drop();
 });
 
-describe('Testing the v1 unauthorized router paths', () => {
-  it('should create a record using POST', async () => {
-    const response = await request.post('/api/v1/clothes').send({
-      name: 't-shirt',
-      color: 'red',
-      size: 'large',
+let models = ['clothes', 'food'];
+
+models.forEach(model => {
+
+  describe('Testing the v1 unauthorized router paths', () => {
+    it('should create a record using POST', async () => {
+      const response = await request.post(`/api/v1/${model}`).send({
+        name: 't-shirt',
+        color: 'red',
+        size: 'large',
+      });
+
+      expect(response.status).toEqual(201);
+      expect(response.body.name).toEqual('t-shirt');
     });
 
-    expect(response.status).toEqual(201);
-    expect(response.body.name).toEqual('t-shirt');
-  });
+    xit('should read a list of records using GET', async () => {
+      await request.post('/api/v1/clothes').send({
+        name: 'jeans',
+        color: 'blue',
+        size: 'large',
+      });
 
-  xit('should read a list of records using GET', async () => {
-    await request.post('/api/v1/clothes').send({
-      name: 'jeans',
-      color: 'blue',
-      size: 'large',
+      const response = await request.get('/api/v1/clothes');
+
+      expect(response.status).toEqual(200);
+      expect(response.body.length).toEqual(2);
     });
 
-    const response = await request.get('/api/v1/clothes');
+    xit('should read a record using GET', async () => {
+      const response = await request.get('/api/v1/clothes/2');
 
-    expect(response.status).toEqual(200);
-    expect(response.body.length).toEqual(2);
-  });
-
-  xit('should read a record using GET', async () => {
-    const response = await request.get('/api/v1/clothes/2');
-
-    expect(response.status).toEqual(200);
-    expect(response.body.name).toEqual('jeans');
-  });
-
-  xit('Update a record using PUT', async () => {
-    const response = await request.put('/api/v1/clothes/2').send({
-      name: 't-shirt',
-      color: 'gray',
-      size: 'large',
+      expect(response.status).toEqual(200);
+      expect(response.body.name).toEqual('jeans');
     });
 
-    expect(response.status).toEqual(200);
-    expect(response.body.color).toEqual('gray');
-  });
+    xit('Update a record using PUT', async () => {
+      const response = await request.put('/api/v1/clothes/2').send({
+        name: 't-shirt',
+        color: 'gray',
+        size: 'large',
+      });
 
-  xit('should destroy a record using DELETE', async () => {
-    const response = await request.delete('/api/v1/clothes/2');
-    const getAttempt = await request.get('/api/v1/clothes/2');
+      expect(response.status).toEqual(200);
+      expect(response.body.color).toEqual('gray');
+    });
 
-    expect(response.status).toEqual(200);
-    expect(response.header.data).toEqual(undefined);
-    expect(getAttempt.body).toEqual(null);
+    xit('should destroy a record using DELETE', async () => {
+      const response = await request.delete('/api/v1/clothes/2');
+      const getAttempt = await request.get('/api/v1/clothes/2');
+
+      expect(response.status).toEqual(200);
+      expect(response.header.data).toEqual(undefined);
+      expect(getAttempt.body).toEqual(null);
+    });
   });
 });
